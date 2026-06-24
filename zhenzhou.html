@@ -31,6 +31,10 @@
         </nav>
 </header></p>
     <p><button class="theme-toggle" id="themeBtn">🌙</button></p>
+    <p><!-- 星光开关按钮 -->
+<button class="star-toggle" id="starBtn">✨</button>
+<!-- 粒子渲染层 -->
+<div class="star-particle-box" id="starBox"></div></p>
     <div class="page-loader">
          <div class="load-text">真昼</div>
     </div>
@@ -96,12 +100,29 @@
     <h3>搜索结果</h3>
     <div id="searchList"></div>
 </div>
+<p>
+<button class="back-top-btn" id="backTopBtn">↑</button></p>
+
 <script>
 // 获取页面元素
 const gameArea = document.getElementById('gameArea');
 const scoreDom = document.getElementById('score');
 const timeDom = document.getElementById('time');
 const startBtn = document.getElementById('startBtn');
+
+// 读取本地保存的最高分，没有则初始0
+let highScore = Number(localStorage.getItem('zhenzhouGameHighScore')) || 0;
+// 在页面显示最高分，你可以加到游戏info区域
+const gameInfo = document.querySelector('.game-info');
+// 插入最高分显示标签
+if(!document.getElementById('highScoreDom')){
+    const highDom = document.createElement('span');
+    highDom.id = 'highScoreDom';
+    highDom.innerHTML = `历史最高分：${highScore}`;
+    gameInfo.appendChild(highDom);
+}
+
+const highScoreDom = document.getElementById('highScoreDom');
 
 let score = 0;
 let time = 30;
@@ -138,12 +159,19 @@ function createTarget() {
     gameArea.appendChild(img);
 }
 
-// 倒计时结束，停止游戏
+// 游戏结束，更新最高分
 function gameOver() {
     clearInterval(gameTimer);
-    clearInterval(spawnTimer);
     isPlaying = false;
-    alert(`游戏结束！你的得分：${score} 分`);
+    // 判断是否刷新最高分
+    if(score > highScore){
+        highScore = score;
+        localStorage.setItem('zhenzhouGameHighScore', highScore);
+        highScoreDom.innerText = `历史最高分：${highScore}`;
+        alert(`🎉 新纪录！本次得分：${score}，刷新最高分！`);
+    }else{
+        alert(`游戏结束！你的得分：${score} 分\n历史最高分：${highScore}`);
+    }
     startBtn.disabled = false;
 }
 
@@ -386,6 +414,90 @@ searchClose.addEventListener('click', () => {
 document.addEventListener('keydown', e => {
     if(e.key === 'Escape') searchModal.classList.remove('active');
 });
+</script>
+
+<script>
+    // 返回顶部功能
+const backTopBtn = document.getElementById('backTopBtn');
+
+// 滚动监听：滚动超过300px显示按钮
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backTopBtn.classList.add('show');
+    } else {
+        backTopBtn.classList.remove('show');
+    }
+});
+
+// 点击平滑回到顶部
+backTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+</script>
+<script>
+    // 鼠标星光粒子特效
+const starBtn = document.getElementById('starBtn');
+const starBox = document.getElementById('starBox');
+// 读取本地记忆，默认开启星光
+let starOpen = localStorage.getItem('starStatus') !== 'off';
+let starTimer = null;
+
+// 初始化按钮文字
+starBtn.textContent = starOpen ? "✨" : "✖️";
+
+// 生成单个星光
+function createStar(x, y) {
+    const star = document.createElement('div');
+    star.className = "star-item";
+    // 随机飘散偏移
+    const tx = (Math.random() - 0.5) * 80;
+    const ty = (Math.random() - 0.5) * 80;
+    star.style.setProperty('--tx', tx + "px");
+    star.style.setProperty('--ty', ty + "px");
+    star.style.left = x + "px";
+    star.style.top = y + "px";
+    starBox.appendChild(star);
+    // 动画结束自动删除粒子，防止DOM堆积
+    setTimeout(() => star.remove(), 800);
+}
+
+// 鼠标移动监听
+function mouseMoveHandler(e) {
+    createStar(e.clientX, e.clientY);
+}
+
+// 开启星光
+function openStar() {
+    starOpen = true;
+    localStorage.setItem('starStatus', 'on');
+    starBtn.textContent = "✨";
+    document.addEventListener('mousemove', mouseMoveHandler);
+}
+// 关闭星光
+function closeStar() {
+    starOpen = false;
+    localStorage.setItem('starStatus', 'off');
+    starBtn.textContent = "✖️";
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    starBox.innerHTML = ""; // 清空剩余粒子
+}
+
+// 页面初始化判断开关状态
+if(starOpen){
+    openStar();
+}
+
+// 点击按钮切换星光开关
+starBtn.addEventListener('click', ()=>{
+    if(starOpen){
+        closeStar();
+    }else{
+        openStar();
+    }
+})
 </script>
 <p><a href="web_1.html" class="back-home">回到首页</a></p>
 
