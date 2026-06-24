@@ -550,3 +550,97 @@ body {
     margin-bottom: 8px;
     color: var(--text-color);
 }
+
+/* 返回顶部按钮 */
+.back-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 9998;
+    background: #2b385b;
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+}
+.back-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+}
+.back-top-btn:hover {
+    transform: scale(1.1);
+    background: #405088;
+}
+[data-theme="dark"] .back-top-btn {
+    background: #fff;
+    color: #222;
+}
+[data-theme="dark"] .back-top-btn:hover {
+    background: #f0f0f0;
+}
+
+/* 星光粒子容器，铺满全屏不遮挡点击 */
+.star-particle-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+/* 单个星光样式 */
+.star-item {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffdd99;
+    box-shadow: 0 0 10px #ffdd99, 0 0 20px #ffcc66;
+    animation: starFade 0.8s ease-out forwards;
+}
+@keyframes starFade {
+    0% {
+        opacity: 1;
+        transform: scale(1) translate(0,0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.2) translate(var(--tx), var(--ty));
+    }
+}
+/* 星光开关按钮 */
+.star-toggle {
+    position: fixed;
+    top: 210px;
+    right: 20px;
+    z-index: 9999;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    transition: transform 0.3s, background 0.3s;
+    background: #2b385b;
+    color: #fff;
+}
+.star-toggle:hover {
+    transform: scale(1.1);
+    background: #1f2a4a;
+}
+[data-theme="dark"] .star-toggle {
+    background: #ffffff;
+    color: #222222;
+}
+[data-theme="dark"] .star-toggle:hover {
+    background: #f0f0f0;
+}
