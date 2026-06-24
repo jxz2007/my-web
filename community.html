@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<link rel="stylesheet" href="zhenzhou.css">
+<link rel="stylesheet" href="web.css">
+<html>
+<head>
+      <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mihayo社区</title>
+</head>
+<body>
+  welcome to mihayou社区
+<header class="top-nav">
+    <div class="nav-logo">
+        <img src="校徽.webp" alt="logo"></div>
+        <nav class="nav-menu">
+            <a href="web_1.html" class="nav-item">首页</a>
+            <a href="news1.html" class="nav-item">学校新闻</a>
+             <div class="nav-dropdown-wrap">
+            <a href="zhenzhou.html" class="nav-item active">真昼</a>
+            <div class="nav-dropdown-menu">
+            <a href="zhenzhou.html">角色首页</a>
+            <a href="zhenzhou-character.html">人物设定档案</a>
+        </div>
+        </div>
+            <a href="download.html" class="nav-item">Vivo耳机</a>
+            <a href="community.html" class="nav-item">社区</a>
+            <a href="pay.html" class="nav-item">充值中心</a>
+            <a href="love.html" class="nav-item">成长关爱系统</a>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索人设/台词/页面">
+            <button id="searchBtn">搜索</button>
+        </div>   
+        </nav>
+</header></p>
+
+<!-- 搜索弹窗 -->
+<div class="search-result-modal" id="searchModal">
+    <span class="search-close" id="searchClose">×</span>
+    <h3>搜索结果</h3>
+    <div id="searchList"></div>
+</div>
+
+<script>
+  // 搜索DOM元素
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchModal = document.getElementById('searchModal');
+const searchList = document.getElementById('searchList');
+const searchClose = document.getElementById('searchClose');
+
+// 全站页面数据库（路径全部修正，无拼写错误）
+const siteData = [
+    {title:"人物设定档案",url:"zhenzhou-character.html",desc:"椎名真昼生日、身高、性格、喜好全部人设资料"},
+    {title:"角色首页",url:"zhenzhou.html",desc:"真昼插画、视频剪辑合集页面"},
+    {title:"首页",url:"web_1.html",desc:"网站主页面，小游戏、留言墙入口"},
+    {title:"经典台词合集",url:"character.html#talk",desc:"真昼暖心名台词汇总"},
+    {title:"剧情时间线",url:"character.html#story",desc:"动画全剧情关键节点梳理"},
+    {title:"资源下载",url:"download.html",desc:"壁纸、原画、PDF设定集下载"},
+    {title:"新闻资讯",url:"news1.html",desc:"动画更新、周边相关资讯"}
+];
+
+// 核心搜索函数
+function doSearch(){
+    // 清理空格+小写统一
+    const key = searchInput.value.trim().toLowerCase();
+    // 清空上次结果
+    searchList.innerHTML = "";
+
+    if(!key){
+        alert("请输入搜索关键词");
+        return;
+    }
+
+    // 模糊匹配筛选
+    const result = siteData.filter(item => {
+        const titleLow = item.title.toLowerCase();
+        const descLow = item.desc.toLowerCase();
+        return titleLow.includes(key) || descLow.includes(key);
+    });
+
+    // 渲染结果
+    if(result.length === 0){
+        searchList.innerHTML = "<p>没有匹配到相关内容，换个关键词试试</p>";
+    }else{
+        result.forEach(item => {
+            const div = document.createElement('div');
+            div.className = "search-item";
+            div.innerHTML = `
+                <a href="${item.url}">${item.title}</a>
+                <p>${item.desc}</p>
+            `;
+            searchList.appendChild(div);
+        })
+    }
+    // 弹出弹窗
+    searchModal.classList.add('active');
+}
+
+// 绑定点击搜索
+searchBtn.addEventListener('click', doSearch);
+// 回车快捷搜索
+searchInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter') doSearch();
+});
+// 关闭弹窗按钮
+searchClose.addEventListener('click', () => {
+    searchModal.classList.remove('active');
+});
+// ESC按键关闭弹窗
+document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') searchModal.classList.remove('active');
+});
+</script>
+</body>
+</html>
