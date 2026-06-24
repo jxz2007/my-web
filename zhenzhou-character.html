@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang = "zh-CN">
+<link rel="stylesheet" href="web.css">
+<link rel="stylesheet" href="zhenzhou.css">
+<html>
+<head>
+<title>真昼-人物设定档案</title>
+</head>
+<body>
+<p>
+<header class="top-nav">
+    <div class="nav-logo">
+        <img src="校徽.webp" alt="logo"></div>
+        <nav class="nav-menu">
+            <a href="web_1.html" class="nav-item">首页</a>
+            <a href="news1.html" class="nav-item">学校新闻</a>
+             <div class="nav-dropdown-wrap">
+            <a href="zhenzhou.html" class="nav-item active">真昼</a>
+            <div class="nav-dropdown-menu">
+            <a href="zhenzhou.html">角色首页</a>
+            <a href="zhenzhou-character.html">人物设定档案</a>
+        </div>
+        </div>
+            <a href="download.html" class="nav-item">Vivo耳机</a>
+            <a href="community.html" class="nav-item">社区</a>
+            <a href="pay.html" class="nav-item">充值中心</a>
+            <a href="love.html" class="nav-item">成长关爱系统</a>
+        </nav>
+</header></p>
+    <p><button class="theme-toggle" id="themeBtn">🌙</button></p>
+<div style="max-width:1100px;margin:0 auto;padding:40px 20px;">
+    <h1 class="fade-scroll" style="text-align:center;font-size:42px;margin-bottom:50px;">椎名真昼 完整人设档案</h1>
+
+    <!-- 基础信息卡片 -->
+    <div class="fade-scroll" style="display:flex;gap:30px;flex-wrap:wrap;background:var(--card-bg);border:1px solid var(--border-color);border-radius:16px;padding:30px;margin-bottom:60px;">
+        <div style="flex:1;min-width:280px;">
+            <img src="真昼.jpg" style="width:100%;border-radius:12px;cursor:pointer;">
+        </div>
+        <div style="flex:2;min-width:300px;font-size:20px;line-height:2;">
+            <p><strong>姓名：</strong>椎名真昼</p>
+            <p><strong>生日：</strong>12月6日</p>
+            <p><strong>身高：</strong>158cm</p>
+            <p><strong>性格：</strong>外表清冷寡言，内心温柔细心，擅长家务料理，有点天然呆</p>
+            <p><strong>喜好：</strong>做饭、整理房间、甜食、夕阳</p>
+            <p><strong>讨厌：</strong>脏乱的环境、辛辣食物、吵闹人群</p>
+            <p><strong>口头禅：</strong>你真的很不会照顾自己呢</p>
+        </div>
+    </div>
+
+    <!-- 剧情时间轴 -->
+    <div class="fade-scroll" style="margin-bottom:60px;">
+        <h2 style="font-size:32px;border-left:6px solid #ffd060;padding-left:14px;margin-bottom:30px;">剧情关键时间线</h2>
+        <div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:16px;padding:25px;">
+            <div style="margin-bottom:22px;">
+                <h3 style="color:#ffd060;margin:0 0 8px;">初遇</h3>
+                <p>男主发现隔壁阳台独自看夕阳的少女，初次搭话，两人相识。</p>
+            </div>
+            <div style="margin-bottom:22px;">
+                <h3 style="color:#ffd060;margin:0 0 8px;">共进晚餐</h3>
+                <p>真昼见男主生活邋遢，主动上门做饭，开启每日共享晚餐日常。</p>
+            </div>
+            <div style="margin-bottom:22px;">
+                <h3 style="color:#ffd060;margin:0 0 8px;">过往心结</h3>
+                <p>揭露家庭带来的孤独与创伤，男主成为她第一个依靠。</p>
+            </div>
+            <div>
+                <h3 style="color:#ffd060;margin:0 0 8px;">双向救赎</h3>
+                <p>两人互相治愈孤独，彼此成为对方生活里不可或缺的存在。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 名台词合集 -->
+    <div class="fade-scroll">
+        <h2 style="font-size:32px;border-left:6px solid #ffd060;padding-left:14px;margin-bottom:30px;">经典台词合集</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+            <div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:20px;font-style:italic;">
+                “只要和你在一起，平凡的日常也会变得很温暖。”
+            </div>
+            <div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:20px;font-style:italic;">
+                “我以前从来没有期待过明天，直到遇见了你。”
+            </div>
+            <div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:20px;font-style:italic;">
+                “不用逞强也没关系，我会一直陪着你的。”
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图片预览弹窗 -->
+<div class="img-preview-mask" id="imgMask">
+    <img src="" id="previewImg">
+</div>
+
+<!-- 所有JS统一复制，和其他页面完全一致 -->
+<script>
+// 滚动入场动画
+const scrollItems = document.querySelectorAll('.fade-scroll');
+function checkScroll() {
+    scrollItems.forEach(item => {
+        const itemTop = item.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if(itemTop < windowHeight - 100){
+            item.classList.add('show');
+        }
+    })
+}
+window.addEventListener('load', checkScroll);
+window.addEventListener('scroll', checkScroll);
+
+// 深浅主题切换
+const themeBtn = document.getElementById('themeBtn');
+const htmlRoot = document.documentElement;
+const saveTheme = localStorage.getItem('site-theme');
+if(saveTheme === 'dark'){
+    htmlRoot.setAttribute('data-theme','dark');
+    themeBtn.textContent = '☀️';
+}
+themeBtn.addEventListener('click', ()=>{
+    const nowTheme = htmlRoot.getAttribute('data-theme');
+    if(nowTheme === 'dark'){
+        htmlRoot.removeAttribute('data-theme');
+        themeBtn.textContent = '🌙';
+        localStorage.setItem('site-theme','light');
+    }else{
+        htmlRoot.setAttribute('data-theme','dark');
+        themeBtn.textContent = '☀️';
+        localStorage.setItem('site-theme','dark');
+    }
+})
+
+// 大图预览
+const imgMask = document.getElementById('imgMask');
+const previewImg = document.getElementById('previewImg');
+const allImages = document.querySelectorAll('img');
+allImages.forEach(img => {
+    if(!img.classList.contains('theme-toggle')){
+        img.addEventListener('click', ()=>{
+            previewImg.src = img.src;
+            imgMask.classList.add('active');
+        })
+    }
+})
+imgMask.addEventListener('click', (e)=>{
+    if(e.target === imgMask){
+        imgMask.classList.remove('active');
+    }
+})
+document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+        imgMask.classList.remove('active');
+    }
+})
+
+// 导航滚动缩小
+const navBar = document.querySelector('.top-nav');
+window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 80){
+        navBar.classList.add('scroll-shrink');
+    }else{
+        navBar.classList.remove('scroll-shrink');
+    }
+})
+</script>
+
+</body>
+</html>
