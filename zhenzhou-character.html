@@ -25,9 +25,29 @@
             <a href="community.html" class="nav-item">社区</a>
             <a href="pay.html" class="nav-item">充值中心</a>
             <a href="love.html" class="nav-item">成长关爱系统</a>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索人设/台词/页面">
+            <button id="searchBtn">搜索</button>
+        </div>   
         </nav>
 </header></p>
     <p><button class="theme-toggle" id="themeBtn">🌙</button></p>
+    <p><button class="theme-toggle" id="changeBgBtn" style="top:85px;">🖼️</button></p>
+    <p><!-- 音乐开关按钮 -->
+<button class="music-toggle" id="musicBtn">🔇</button>
+<div class="volume-panel" id="volumePanel">
+    <div class="volume-text">音量：<span id="volNum">40</span>%</div>
+    <input type="range" id="volumeSlider" min="0" max="100" value="40">
+</div>
+
+<!-- 音频播放器，隐藏 -->
+<audio id="bgMusic" loop preload="auto"></audio>
+
+<!-- 星光开关按钮 -->
+<button class="star-toggle" id="starBtn">✨</button>
+<!-- 粒子渲染层 -->
+<div class="star-particle-box" id="starBox"></div>
+
 <div style="max-width:1100px;margin:0 auto;padding:40px 20px;">
     <h1 class="fade-scroll" style="text-align:center;font-size:42px;margin-bottom:50px;">椎名真昼 完整人设档案</h1>
 
@@ -92,6 +112,14 @@
     <img src="" id="previewImg">
 </div>
 
+<!-- 搜索弹窗 -->
+<div class="search-result-modal" id="searchModal">
+    <span class="search-close" id="searchClose">×</span>
+    <h3>搜索结果</h3>
+    <div id="searchList"></div>
+</div>
+<p>
+<button class="back-top-btn" id="backTopBtn">↑</button></p>
 <!-- 所有JS统一复制，和其他页面完全一致 -->
 <script>
 // 滚动入场动画
@@ -159,6 +187,274 @@ window.addEventListener('scroll', ()=>{
         navBar.classList.add('scroll-shrink');
     }else{
         navBar.classList.remove('scroll-shrink');
+    }
+})
+</script>
+
+<script>
+  // 搜索DOM元素
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchModal = document.getElementById('searchModal');
+const searchList = document.getElementById('searchList');
+const searchClose = document.getElementById('searchClose');
+
+// 全站页面数据库（路径全部修正，无拼写错误）
+const siteData = [
+    {title:"人物设定档案",url:"zhenzhou-character.html",desc:"椎名真昼生日、身高、性格、喜好全部人设资料"},
+    {title:"角色首页",url:"zhenzhou.html",desc:"真昼插画、视频剪辑合集页面"},
+    {title:"首页",url:"web_1.html",desc:"网站主页面，小游戏、留言墙入口"},
+    {title:"经典台词合集",url:"character.html#talk",desc:"真昼暖心名台词汇总"},
+    {title:"剧情时间线",url:"character.html#story",desc:"动画全剧情关键节点梳理"},
+    {title:"资源下载",url:"download.html",desc:"壁纸、原画、PDF设定集下载"},
+    {title:"新闻资讯",url:"news1.html",desc:"动画更新、周边相关资讯"}
+];
+
+// 核心搜索函数
+function doSearch(){
+    // 清理空格+小写统一
+    const key = searchInput.value.trim().toLowerCase();
+    // 清空上次结果
+    searchList.innerHTML = "";
+
+    if(!key){
+        alert("请输入搜索关键词");
+        return;
+    }
+
+    // 模糊匹配筛选
+    const result = siteData.filter(item => {
+        const titleLow = item.title.toLowerCase();
+        const descLow = item.desc.toLowerCase();
+        return titleLow.includes(key) || descLow.includes(key);
+    });
+
+    // 渲染结果
+    if(result.length === 0){
+        searchList.innerHTML = "<p>没有匹配到相关内容，换个关键词试试</p>";
+    }else{
+        result.forEach(item => {
+            const div = document.createElement('div');
+            div.className = "search-item";
+            div.innerHTML = `
+                <a href="${item.url}">${item.title}</a>
+                <p>${item.desc}</p>
+            `;
+            searchList.appendChild(div);
+        })
+    }
+    // 弹出弹窗
+    searchModal.classList.add('active');
+}
+
+// 绑定点击搜索
+searchBtn.addEventListener('click', doSearch);
+// 回车快捷搜索
+searchInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter') doSearch();
+});
+// 关闭弹窗按钮
+searchClose.addEventListener('click', () => {
+    searchModal.classList.remove('active');
+});
+// ESC按键关闭弹窗
+document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') searchModal.classList.remove('active');
+});
+</script>
+<script>
+    // 随机壁纸数组，把你所有背景图文件名填进来
+const bgImgList = [
+    "真昼.jpg",
+    "真昼_1.webp",
+    "真昼_2.webp",
+    "真昼_3.webp",
+    "真昼_4.webp",
+    "真昼_5.webp",
+    "真昼_6.webp",
+    "真昼_7.webp"
+
+
+];
+
+// 随机抽取一张
+function setRandomBg() {
+    const randomNum = Math.floor(Math.random() * bgImgList.length);
+    const selectedImg = bgImgList[randomNum];
+    document.body.style.backgroundImage = `url(${selectedImg})`;
+}
+
+// 页面加载时执行
+window.addEventListener('load', setRandomBg);
+
+const changeBgBtn = document.getElementById('changeBgBtn');
+changeBgBtn.addEventListener('click', setRandomBg);
+</script>
+
+<script>
+
+const bgmList = [
+    "day lights.mp3",
+    "the best of me.mp3",
+    "things you said.mp3",
+    "城南花已开.mp3"
+];
+const musicBtn = document.getElementById('musicBtn');
+const bgMusic = document.getElementById('bgMusic');
+const volumePanel = document.getElementById('volumePanel');
+const volumeSlider = document.getElementById('volumeSlider');
+const volNum = document.getElementById('volNum');
+
+// 读取本地记忆
+let isMusicOn = localStorage.getItem('musicStatus') === 'on';
+let saveVol = Number(localStorage.getItem('musicVolume')) || 40;
+let currentSongIndex = 0;
+
+// 初始化音量
+bgMusic.volume = saveVol / 100;
+volumeSlider.value = saveVol;
+volNum.innerText = saveVol;
+
+// 随机切歌函数
+function playRandomSong() {
+    // 随机选一首，避开当前正在播放的
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * bgmList.length);
+    } while (newIndex === currentSongIndex && bgmList.length > 1);
+    currentSongIndex = newIndex;
+    bgMusic.src = bgmList[currentSongIndex];
+    if(isMusicOn) bgMusic.play();
+}
+
+// 歌曲播放结束自动换下一首
+bgMusic.addEventListener('ended', playRandomSong);
+
+// 页面初始化加载一首
+playRandomSong();
+
+// 初始化播放状态
+if(isMusicOn){
+    bgMusic.play().catch(()=>{
+        isMusicOn = false;
+        localStorage.setItem('musicStatus','off');
+        musicBtn.textContent = '🔇';
+    })
+    musicBtn.textContent = '🔊';
+}
+
+// 点击音乐按钮：播放暂停 + 音量面板展开收起
+musicBtn.addEventListener('click', ()=>{
+    if(isMusicOn){
+        bgMusic.pause();
+        isMusicOn = false;
+        musicBtn.textContent = '🔇';
+        localStorage.setItem('musicStatus','off');
+    }else{
+        bgMusic.play();
+        isMusicOn = true;
+        musicBtn.textContent = '🔊';
+        localStorage.setItem('musicStatus','on');
+    }
+    volumePanel.classList.toggle('active');
+})
+
+// 拖动滑块调节音量
+volumeSlider.addEventListener('input', ()=>{
+    let val = volumeSlider.value;
+    bgMusic.volume = val / 100;
+    volNum.innerText = val;
+    localStorage.setItem('musicVolume', val);
+})
+
+// 点击空白关闭音量面板
+document.addEventListener('click', (e)=>{
+    if(!musicBtn.contains(e.target) && !volumePanel.contains(e.target)){
+        volumePanel.classList.remove('active');
+    }
+})
+</script>
+<script>
+    // 返回顶部功能
+const backTopBtn = document.getElementById('backTopBtn');
+
+// 滚动监听：滚动超过300px显示按钮
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backTopBtn.classList.add('show');
+    } else {
+        backTopBtn.classList.remove('show');
+    }
+});
+
+// 点击平滑回到顶部
+backTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+</script>
+
+<script>
+    // 鼠标星光粒子特效
+const starBtn = document.getElementById('starBtn');
+const starBox = document.getElementById('starBox');
+// 读取本地记忆，默认开启星光
+let starOpen = localStorage.getItem('starStatus') !== 'off';
+let starTimer = null;
+
+// 初始化按钮文字
+starBtn.textContent = starOpen ? "✨" : "✖️";
+
+// 生成单个星光
+function createStar(x, y) {
+    const star = document.createElement('div');
+    star.className = "star-item";
+    // 随机飘散偏移
+    const tx = (Math.random() - 0.5) * 80;
+    const ty = (Math.random() - 0.5) * 80;
+    star.style.setProperty('--tx', tx + "px");
+    star.style.setProperty('--ty', ty + "px");
+    star.style.left = x + "px";
+    star.style.top = y + "px";
+    starBox.appendChild(star);
+    // 动画结束自动删除粒子，防止DOM堆积
+    setTimeout(() => star.remove(), 800);
+}
+
+// 鼠标移动监听
+function mouseMoveHandler(e) {
+    createStar(e.clientX, e.clientY);
+}
+
+// 开启星光
+function openStar() {
+    starOpen = true;
+    localStorage.setItem('starStatus', 'on');
+    starBtn.textContent = "✨";
+    document.addEventListener('mousemove', mouseMoveHandler);
+}
+// 关闭星光
+function closeStar() {
+    starOpen = false;
+    localStorage.setItem('starStatus', 'off');
+    starBtn.textContent = "✖️";
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    starBox.innerHTML = ""; // 清空剩余粒子
+}
+
+// 页面初始化判断开关状态
+if(starOpen){
+    openStar();
+}
+
+// 点击按钮切换星光开关
+starBtn.addEventListener('click', ()=>{
+    if(starOpen){
+        closeStar();
+    }else{
+        openStar();
     }
 })
 </script>
