@@ -1,0 +1,6 @@
+
+{
+  "rewrites": [
+    { "source": "/", "destination": "/web_1.html" }
+  ]
+}
